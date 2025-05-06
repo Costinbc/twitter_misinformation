@@ -20,12 +20,15 @@ base_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
 src_dir = os.path.join(base_dir, "src")
 data_dir = os.path.join(base_dir, "data")
 rda_2017_dir = os.path.join(data_dir, "rumor-detection-acl-2017")
+checkpoint_dir = os.path.join(src_dir, "bertweet-results")
+
 
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
+
 training_args = TrainingArguments(
-    output_dir="./bertweet-results",
+    output_dir=checkpoint_dir,
     num_train_epochs=4,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
@@ -101,8 +104,14 @@ if __name__ == "__main__":
         eval_dataset=val_dataset,
         compute_metrics=compute_metrics,
     )
+    checkpoints = [f.path for f in os.scandir(checkpoint_dir) if f.is_dir() and "checkpoint" in f.name]
 
-    trainer.train()
+    if checkpoints:
+        print("Resuming from latest checkpoint...")
+        trainer.train(resume_from_checkpoint=True)
+    else:
+        print("No checkpoints found. Starting fresh training...")
+        trainer.train()
 
     metrics = trainer.evaluate()
     print("Evaluation metrics:", metrics)
