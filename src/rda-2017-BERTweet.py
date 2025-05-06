@@ -22,10 +22,8 @@ data_dir = os.path.join(base_dir, "data")
 rda_2017_dir = os.path.join(data_dir, "rumor-detection-acl-2017")
 checkpoint_dir = os.path.join(src_dir, "bertweet-results")
 
-
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-
 
 training_args = TrainingArguments(
     output_dir=checkpoint_dir,
