@@ -1,25 +1,37 @@
 # Mitigation and Detection of Misinformation on X (formerly known as Twitter)
 
-## BERTweet-base
-
+# Datasets
 ### Rumor-Detection-Acl 2017
-The model was fine-tuned on a merged dataset from Twitter15 and Twitter16. Below are the final evaluation metrics:
+A merged dataset from Twitter15 and Twitter16.
 
 - **Dataset size**: 2000+ labeled tweets
 - **Labels**: True, False, Unverified, Non-rumor*
+  
+*currently unused 
+
+### MiDe22
+A multi-event tweet dataset.
+
+- **Dataset size**: 5000+ labeled tweets
+- **Labels**: True, False, Other
+
+### ANTiVax
+A dataset of anti-vaccine tweets from November 2020 to July 2021.
+
+- **Dataset size**: 5000+ labeled tweets
+- **Labels**: True, False
+  
+## BERTweet-base model results
+
+### Rumor-Detection-Acl 2017
 - **Validation Accuracy**: 81.1%
 - **Macro F1 Score**: 0.798
 - **Validation Loss**: 0.587
 - **Evaluation Speed**: 1670 tweets/sec
 - **Epochs**: 4
 
-*currently unused 
 
 ### ANTiVax
-The model continued training on a dataset of anti-vaccine tweets from November 2020 to July 2021. Below are the final evaluation metrics:
-
-- **Dataset size**: 5000+ labeled tweets
-- **Labels**: True, False
 - **Validation Accuracy**: 97.4%
 - **Macro F1 Score**: 0.970
 - **Validation Loss**: 0.122
@@ -27,12 +39,32 @@ The model continued training on a dataset of anti-vaccine tweets from November 2
 - **Epochs**: 4
 
 ### MiDe22
-The model continued training on a multi-event tweet dataset. Below are the final evaluation metrics:
-
-- **Dataset size**: 5000+ labeled tweets
-- **Labels**: True, False, Other
 - **Validation Accuracy**: 80.2%
 - **Macro F1 Score**: 0.753
 - **Validation Loss**: 0.590
 - **Evaluation Speed**: 1083 tweets/sec
+- **Epochs**: 4
+
+## RoBERTa-base fine-tuned for irony detection
+
+### Rumor-Detection-Acl 2017
+- **Validation Accuracy**: 82.1%
+- **Macro F1 Score**: 0.811
+- **Validation Loss**: 0.879
+- **Evaluation Speed**: 836 tweets/sec
+- **Epochs**: 4
+
+
+### ANTiVax
+- **Validation Accuracy**: 97.5%
+- **Macro F1 Score**: 0.972
+- **Validation Loss**: 0.143
+- **Evaluation Speed**: 1207 tweets/sec
+- **Epochs**: 4
+
+### MiDe22
+- **Validation Accuracy**: 79.2%
+- **Macro F1 Score**: 0.748
+- **Validation Loss**: 0.549
+- **Evaluation Speed**: 907 tweets/sec
 - **Epochs**: 4
