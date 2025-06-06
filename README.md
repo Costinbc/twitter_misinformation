@@ -45,7 +45,7 @@ A dataset of anti-vaccine tweets from November 2020 to July 2021.
 - **Evaluation Speed**: 1083 tweets/sec
 - **Epochs**: 4
 
-## RoBERTa-base fine-tuned for irony detection
+## RoBERTa-base fine-tuned for irony detection results
 
 ### Rumor-Detection-Acl 2017
 - **Validation Accuracy**: 82.1%
