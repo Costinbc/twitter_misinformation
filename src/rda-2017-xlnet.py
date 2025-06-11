@@ -19,29 +19,32 @@ nltk.download('wordnet')
 base_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
 src_dir = os.path.join(base_dir, "src")
 data_dir = os.path.join(base_dir, "data")
-antivax_dir = os.path.join(data_dir, "ANTiVax")
-checkpoint_dir = os.path.join(src_dir, "roberta-irony-results")
+rda_2017_dir = os.path.join(data_dir, "rumor-detection-acl-2017")
+checkpoint_dir = os.path.join(src_dir, "xlnet-results")
 output_dir = os.path.join(base_dir, "models")
 
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 training_args = TrainingArguments(
-    output_dir=os.path.join(checkpoint_dir, "ANTiVax"),
-    num_train_epochs=4,
+    output_dir=os.path.join(checkpoint_dir, "rda-2017"),
+    num_train_epochs=6,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
+    learning_rate=3e-5,
     eval_strategy="epoch",
     save_strategy="epoch",
     logging_dir="./logs",
     logging_strategy="steps",
     logging_steps=50,
+    warmup_steps = 500,
+    weight_decay=0.01,
     load_best_model_at_end=True,
     metric_for_best_model="f1",
     fp16=True,
 )
 
-class AntiVaxDataset(Dataset):
+class RumorDataset(Dataset):
     def __init__(self, encodings, labels):
         self.encodings = encodings
         self.labels = labels
@@ -54,11 +57,10 @@ class AntiVaxDataset(Dataset):
 
 def clean_text(text):
     text = text.lower()
-    text = re.sub(r"#\w+", "", text)
-    text = re.sub(r"http\S+|www\S+|url", "", text)
-    text = re.sub(r"@\w+", "", text)
-    text = re.sub(r"[^a-z0-9\s]", " ", text)
-    text = re.sub(r"\s+", " ", text).strip()
+
+    text = re.sub(r'url', '', text)
+    text = re.sub(r'@\w+|#\w+', '', text)
+    text = re.sub(r'[^a-z\s]', '', text)
 
     tokens = nltk.word_tokenize(text)
     tokens = [t for t in tokens if t not in stop_words and len(t) > 2]
@@ -75,26 +77,31 @@ def compute_metrics(eval_pred):
     }
 
 if __name__ == "__main__":
-    df = pd.read_csv(os.path.join(antivax_dir, "ANTiVax_merged.csv"), encoding='utf-8')
-    df['clean_text'] = df['Text'].apply(clean_text)
-    label_map = {0: 0, 1: 1}
+    df = pd.read_csv(os.path.join(rda_2017_dir, "merged.csv"), encoding='utf-8')
+    df['clean_text'] = df['text'].apply(clean_text)
+
+    # Removing non-rumor tweets as they are hard to classify
+    df = df[df['label'] != 'non-rumor']
+    label_map = {'true': 0, 'false': 1, 'unverified': 2}
     df['label_id'] = df['label'].map(label_map)
+
 
     train_texts, val_texts, train_labels, val_labels = train_test_split(
         df['clean_text'], df['label_id'], test_size=0.2, random_state=42, stratify=df['label_id']
     )
 
-    config = AutoConfig.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), num_labels=2)
+    cfg = AutoConfig.from_pretrained("xlnet-base-cased")
+    cfg.num_labels = 3
+    cfg.problem_type = "single_label_classification"
 
-    tokenizer = AutoTokenizer.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), use_fast=True)
-    model = AutoModelForSequenceClassification.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"),
-                                                               config=config, ignore_mismatched_sizes=True)
+    tokenizer = AutoTokenizer.from_pretrained("xlnet-base-cased", use_fast=True)
+    model = AutoModelForSequenceClassification.from_pretrained("xlnet-base-cased", config=cfg, ignore_mismatched_sizes=True)
 
     train_encodings = tokenizer(list(train_texts), truncation=True, padding=True, max_length=128)
     val_encodings = tokenizer(list(val_texts), truncation=True, padding=True, max_length=128)
 
-    train_dataset = AntiVaxDataset(train_encodings, train_labels.tolist())
-    val_dataset = AntiVaxDataset(val_encodings, val_labels.tolist())
+    train_dataset = RumorDataset(train_encodings, train_labels.tolist())
+    val_dataset = RumorDataset(val_encodings, val_labels.tolist())
 
     trainer = Trainer(
         model=model,
@@ -103,7 +110,7 @@ if __name__ == "__main__":
         eval_dataset=val_dataset,
         compute_metrics=compute_metrics,
     )
-    checkpoints = [f.path for f in os.scandir(os.path.join(checkpoint_dir, "ANTiVax")) if f.is_dir() and "checkpoint" in f.name]
+    checkpoints = [f.path for f in os.scandir(os.path.join(checkpoint_dir, "rda-2017")) if f.is_dir() and "checkpoint" in f.name]
 
     if checkpoints:
         print("Resuming from latest checkpoint...")
@@ -112,8 +119,8 @@ if __name__ == "__main__":
         print("No checkpoints found. Starting fresh training...")
         trainer.train()
 
-    model.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
-    tokenizer.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
+    model.save_pretrained(os.path.join(output_dir, "xlnet-rda-2017"))
+    tokenizer.save_pretrained(os.path.join(output_dir, "xlnet-rda-2017"))
 
     metrics = trainer.evaluate()
     print("Evaluation metrics:", metrics)
@@ -124,10 +131,10 @@ if __name__ == "__main__":
 
     cm = confusion_matrix(y_true, y_pred)
 
-    labels = ['true', 'false']
+    labels = ['true', 'false', 'unverified']
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
 
     fig, ax = plt.subplots(figsize=(6, 6))
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
-    plt.title("Confusion Matrix - ANTiVax Roberta-irony")
-    plt.savefig("ANTiVax_confusion_matrix_roberta_irony.png", dpi=300, bbox_inches='tight')
+    plt.title("Confusion Matrix - RDA-2017 XLnet")
+    plt.savefig("rda-2017_confusion_matrix_xlnet.png", dpi=300, bbox_inches='tight')
