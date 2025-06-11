@@ -20,7 +20,7 @@ base_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
 src_dir = os.path.join(base_dir, "src")
 data_dir = os.path.join(base_dir, "data")
 antivax_dir = os.path.join(data_dir, "ANTiVax")
-checkpoint_dir = os.path.join(src_dir, "roberta-irony-results")
+checkpoint_dir = os.path.join(src_dir, "xlnet-results")
 output_dir = os.path.join(base_dir, "models")
 
 stop_words = set(stopwords.words('english'))
@@ -84,10 +84,10 @@ if __name__ == "__main__":
         df['clean_text'], df['label_id'], test_size=0.2, random_state=42, stratify=df['label_id']
     )
 
-    config = AutoConfig.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), num_labels=2)
+    config = AutoConfig.from_pretrained(os.path.join(output_dir, "xlnet-rda-2017"), num_labels=2, problem_type="single_label_classification")
 
-    tokenizer = AutoTokenizer.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), use_fast=True)
-    model = AutoModelForSequenceClassification.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"),
+    tokenizer = AutoTokenizer.from_pretrained(os.path.join(output_dir, "xlnet-rda-2017"), use_fast=True)
+    model = AutoModelForSequenceClassification.from_pretrained(os.path.join(output_dir, "xlnet-rda-2017"),
                                                                config=config, ignore_mismatched_sizes=True)
 
     train_encodings = tokenizer(list(train_texts), truncation=True, padding=True, max_length=128)
@@ -112,8 +112,8 @@ if __name__ == "__main__":
         print("No checkpoints found. Starting fresh training...")
         trainer.train()
 
-    model.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
-    tokenizer.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
+    model.save_pretrained(os.path.join(output_dir, "xlnet-ANTiVax"))
+    tokenizer.save_pretrained(os.path.join(output_dir, "xlnet-ANTiVax"))
 
     metrics = trainer.evaluate()
     print("Evaluation metrics:", metrics)
@@ -129,5 +129,5 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(figsize=(6, 6))
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
-    plt.title("Confusion Matrix - ANTiVax Roberta-irony")
-    plt.savefig("ANTiVax_confusion_matrix_roberta_irony.png", dpi=300, bbox_inches='tight')
+    plt.title("Confusion Matrix - ANTiVax XLnet")
+    plt.savefig("ANTiVax_confusion_matrix_xlnet.png", dpi=300, bbox_inches='tight')

@@ -80,9 +80,6 @@ if __name__ == "__main__":
     label_map = {0: 0, 1: 1}
     df['label_id'] = df['label'].map(label_map)
 
-    print(df['label_id'].isna().sum())  # number of NaNs in labels
-    print(df['clean_text'].isna().sum())  # number of NaNs in texts
-
     train_texts, val_texts, train_labels, val_labels = train_test_split(
         df['clean_text'], df['label_id'], test_size=0.2, random_state=42, stratify=df['label_id']
     )

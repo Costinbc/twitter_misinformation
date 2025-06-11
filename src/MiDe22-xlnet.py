@@ -19,15 +19,16 @@ nltk.download('wordnet')
 base_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
 src_dir = os.path.join(base_dir, "src")
 data_dir = os.path.join(base_dir, "data")
-antivax_dir = os.path.join(data_dir, "ANTiVax")
-checkpoint_dir = os.path.join(src_dir, "roberta-irony-results")
+mide22_dir = os.path.join(data_dir, "MiDe22", "dataset", "EN")
+folds_dir = os.path.join(mide22_dir, "folds")
+checkpoint_dir = os.path.join(src_dir, "xlnet-results")
 output_dir = os.path.join(base_dir, "models")
 
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 training_args = TrainingArguments(
-    output_dir=os.path.join(checkpoint_dir, "ANTiVax"),
+    output_dir=os.path.join(checkpoint_dir, "MiDe22"),
     num_train_epochs=4,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
@@ -41,7 +42,7 @@ training_args = TrainingArguments(
     fp16=True,
 )
 
-class AntiVaxDataset(Dataset):
+class Mide22Dataset(Dataset):
     def __init__(self, encodings, labels):
         self.encodings = encodings
         self.labels = labels
@@ -75,26 +76,26 @@ def compute_metrics(eval_pred):
     }
 
 if __name__ == "__main__":
-    df = pd.read_csv(os.path.join(antivax_dir, "ANTiVax_merged.csv"), encoding='utf-8')
-    df['clean_text'] = df['Text'].apply(clean_text)
-    label_map = {0: 0, 1: 1}
+    df = pd.read_csv(os.path.join(mide22_dir, "mide22_en_misinfo_tweets.tsv"), encoding='utf-8', sep="\t")
+    df['clean_text'] = df['text'].apply(clean_text)
+    label_map = {"True": 0, "False": 1, "Other": 2}
     df['label_id'] = df['label'].map(label_map)
 
     train_texts, val_texts, train_labels, val_labels = train_test_split(
         df['clean_text'], df['label_id'], test_size=0.2, random_state=42, stratify=df['label_id']
     )
 
-    config = AutoConfig.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), num_labels=2)
+    config = AutoConfig.from_pretrained(os.path.join(output_dir, "xlnet-ANTiVax"), num_labels=3, problem_type="single_label_classification")
 
-    tokenizer = AutoTokenizer.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"), use_fast=True)
-    model = AutoModelForSequenceClassification.from_pretrained(os.path.join(output_dir, "roberta-irony-rda-2017"),
+    tokenizer = AutoTokenizer.from_pretrained(os.path.join(output_dir, "xlnet-ANTiVax"), use_fast=True)
+    model = AutoModelForSequenceClassification.from_pretrained(os.path.join(output_dir, "xlnet-ANTiVax"),
                                                                config=config, ignore_mismatched_sizes=True)
 
     train_encodings = tokenizer(list(train_texts), truncation=True, padding=True, max_length=128)
     val_encodings = tokenizer(list(val_texts), truncation=True, padding=True, max_length=128)
 
-    train_dataset = AntiVaxDataset(train_encodings, train_labels.tolist())
-    val_dataset = AntiVaxDataset(val_encodings, val_labels.tolist())
+    train_dataset = Mide22Dataset(train_encodings, train_labels.tolist())
+    val_dataset = Mide22Dataset(val_encodings, val_labels.tolist())
 
     trainer = Trainer(
         model=model,
@@ -103,7 +104,7 @@ if __name__ == "__main__":
         eval_dataset=val_dataset,
         compute_metrics=compute_metrics,
     )
-    checkpoints = [f.path for f in os.scandir(os.path.join(checkpoint_dir, "ANTiVax")) if f.is_dir() and "checkpoint" in f.name]
+    checkpoints = [f.path for f in os.scandir(os.path.join(checkpoint_dir, "MiDe22")) if f.is_dir() and "checkpoint" in f.name]
 
     if checkpoints:
         print("Resuming from latest checkpoint...")
@@ -112,8 +113,8 @@ if __name__ == "__main__":
         print("No checkpoints found. Starting fresh training...")
         trainer.train()
 
-    model.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
-    tokenizer.save_pretrained(os.path.join(output_dir, "roberta-irony-ANTiVax"))
+    model.save_pretrained(os.path.join(output_dir, "xlnet-MiDe22"))
+    tokenizer.save_pretrained(os.path.join(output_dir, "xlnet-MiDe22"))
 
     metrics = trainer.evaluate()
     print("Evaluation metrics:", metrics)
@@ -124,10 +125,10 @@ if __name__ == "__main__":
 
     cm = confusion_matrix(y_true, y_pred)
 
-    labels = ['true', 'false']
+    labels = ['true', 'false', 'other']
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
 
     fig, ax = plt.subplots(figsize=(6, 6))
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
-    plt.title("Confusion Matrix - ANTiVax Roberta-irony")
-    plt.savefig("ANTiVax_confusion_matrix_roberta_irony.png", dpi=300, bbox_inches='tight')
+    plt.title("Confusion Matrix - MiDe22 XLnet")
+    plt.savefig("MiDe22_confusion_matrix_xlnet.png", dpi=300, bbox_inches='tight')
