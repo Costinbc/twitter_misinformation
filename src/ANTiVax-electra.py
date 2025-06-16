@@ -132,8 +132,3 @@ if __name__ == "__main__":
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
     plt.title("Confusion Matrix - ANTiVax Electra")
     plt.savefig(os.path.join(images_dir, "confusion_matrix_antivax_electra.png"), dpi=300, bbox_inches='tight')
-
-    Evaluation
-    metrics: {'eval_loss': 0.1284422129392624, 'eval_accuracy': 0.974903474903475, 'eval_f1': 0.9722198157613561,
-              'eval_runtime': 0.9537, 'eval_samples_per_second': 1086.316, 'eval_steps_per_second': 34.603,
-              'epoch': 4.0}

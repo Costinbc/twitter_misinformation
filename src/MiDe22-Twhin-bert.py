@@ -133,7 +133,3 @@ if __name__ == "__main__":
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
     plt.title("Confusion Matrix - MiDe22 Twhin-BERT")
     plt.savefig(os.path.join(images_dir, "mide22_twhin_bert_confusion_matrix.png"), dpi=300, bbox_inches='tight')
-
-    Evaluation
-    metrics: {'eval_loss': 0.6843715310096741, 'eval_accuracy': 0.7767265846736046, 'eval_f1': 0.7399612216609568,
-              'eval_runtime': 1.3228, 'eval_samples_per_second': 799.049, 'eval_steps_per_second': 25.703, 'epoch': 4.0}

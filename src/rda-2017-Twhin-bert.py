@@ -136,6 +136,3 @@ if __name__ == "__main__":
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
     plt.title("Confusion Matrix - RDA-2017 Twhin-BERT")
     plt.savefig(os.path.join(images_dir, "rda-2017_confusion_matrix_twhin_bert.png"), dpi=300, bbox_inches='tight')
-
-    Evaluation metrics: {'eval_loss': 0.6806043982505798, 'eval_accuracy': 0.8141025641025641, 'eval_f1': 0.8044663722090042, 'eval_runtime': 0.3578, 'eval_samples_per_second': 872.018, 'eval_steps_per_second': 27.949, 'epoch': 4.0}
-

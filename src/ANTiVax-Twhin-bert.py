@@ -132,7 +132,3 @@ if __name__ == "__main__":
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
     plt.title("Confusion Matrix - ANTiVax Twhin-BERT")
     plt.savefig(os.path.join(images_dir, "ANTiVax_Twhin_BERT_Confusion_Matrix.png"), dpi=300, bbox_inches='tight')
-
-    Evaluation
-    metrics: {'eval_loss': 0.14038804173469543, 'eval_accuracy': 0.9768339768339769, 'eval_f1': 0.9743906659415633,
-              'eval_runtime': 1.0874, 'eval_samples_per_second': 952.724, 'eval_steps_per_second': 30.347, 'epoch': 4.0}

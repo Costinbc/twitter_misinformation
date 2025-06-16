@@ -136,7 +136,3 @@ if __name__ == "__main__":
     disp.plot(ax=ax, cmap=plt.cm.Blues, colorbar=False)
     plt.title("Confusion Matrix - RDA-2017 Electra")
     plt.savefig(os.path.join(images_dir, "rda-2017_confusion_matrix_electra.png"), dpi=300, bbox_inches='tight')
-
-    Evaluation
-    metrics: {'eval_loss': 0.5825706720352173, 'eval_accuracy': 0.8108974358974359, 'eval_f1': 0.8011828213066603,
-              'eval_runtime': 0.2596, 'eval_samples_per_second': 1201.95, 'eval_steps_per_second': 38.524, 'epoch': 4.0}
