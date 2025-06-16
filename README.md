@@ -89,3 +89,49 @@ A dataset of anti-vaccine tweets from November 2020 to July 2021.
 - **Validation Loss**: 0.756
 - **Evaluation Speed**: 477 tweets/sec
 - **Epochs**: 4
+
+## Electra base discriminator model results
+
+### Rumor-Detection-Acl 2017
+- **Validation Accuracy**: 81.1%
+- **Macro F1 Score**: 0.801
+- **Validation Loss**: 0.582
+- **Evaluation Speed**: 1202 tweets/sec
+- **Epochs**: 4
+
+### ANTiVax
+- **Validation Accuracy**: 97.5%
+- **Macro F1 Score**: 0.972
+- **Validation Loss**: 0.128
+- **Evaluation Speed**: 1086 tweets/sec
+- **Epochs**: 4
+
+### MiDe22
+- **Validation Accuracy**: 79.8%
+- **Macro F1 Score**: 0.754
+- **Validation Loss**: 0.635
+- **Evaluation Speed**: 1057 tweets/sec
+- **Epochs**: 4
+
+## Twhin BERT base model results
+
+### Rumor-Detection-Acl 2017
+- **Validation Accuracy**: 81.4%
+- **Macro F1 Score**: 0.804
+- **Validation Loss**: 0.680
+- **Evaluation Speed**: 872 tweets/sec
+- **Epochs**: 4
+
+### ANTiVax
+- **Validation Accuracy**: 97.7%
+- **Macro F1 Score**: 0.974
+- **Validation Loss**: 0.140
+- **Evaluation Speed**: 952 tweets/sec
+- **Epochs**: 4
+
+### MiDe22
+- **Validation Accuracy**: 77.7%
+- **Macro F1 Score**: 0.739
+- **Validation Loss**: 0.684
+- **Evaluation Speed**: 799 tweets/sec
+- **Epochs**: 4
