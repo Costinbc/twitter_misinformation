@@ -27,14 +27,14 @@ A dataset of anti-vaccine tweets from November 2020 to July 2021.
 - **Validation Accuracy**: 81.1%
 - **Macro F1 Score**: 0.798
 - **Validation Loss**: 0.587
-- **Evaluation Speed**: 1670 tweets/sec
+- **Evaluation Speed**: 1027 tweets/sec
 - **Epochs**: 4
 
 ### ANTiVax
 - **Validation Accuracy**: 97.4%
 - **Macro F1 Score**: 0.970
 - **Validation Loss**: 0.122
-- **Evaluation Speed**: 1829 tweets/sec
+- **Evaluation Speed**: 1328 tweets/sec
 - **Epochs**: 4
 
 ### MiDe22
