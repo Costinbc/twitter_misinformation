@@ -3,21 +3,21 @@
     "RDA-2017": {
       "accuracy": 0.811,
       "macro_f1": 0.798,
-      "val_loss": 0.587,
-      "tweets_per_sec": 1670,
+      "eval_loss": 0.587,
+      "tweets_per_sec": 1027,
       "epochs": 4
     },
     "ANTiVax": {
       "accuracy": 0.974,
       "macro_f1": 0.970,
-      "val_loss": 0.122,
-      "tweets_per_sec": 1829,
+      "eval_loss": 0.122,
+      "tweets_per_sec": 1328,
       "epochs": 4
     },
     "MiDe22": {
       "accuracy": 0.802,
       "macro_f1": 0.753,
-      "val_loss": 0.590,
+      "eval_loss": 0.590,
       "tweets_per_sec": 1083,
       "epochs": 4
     }
@@ -27,21 +27,21 @@
     "RDA-2017": {
       "accuracy": 0.821,
       "macro_f1": 0.811,
-      "val_loss": 0.879,
+      "eval_loss": 0.879,
       "tweets_per_sec": 836,
       "epochs": 4
     },
     "ANTiVax": {
       "accuracy": 0.975,
       "macro_f1": 0.972,
-      "val_loss": 0.143,
+      "eval_loss": 0.143,
       "tweets_per_sec": 1207,
       "epochs": 4
     },
     "MiDe22": {
       "accuracy": 0.792,
       "macro_f1": 0.748,
-      "val_loss": 0.549,
+      "eval_loss": 0.549,
       "tweets_per_sec": 907,
       "epochs": 4
     }
@@ -51,21 +51,21 @@
     "RDA-2017": {
       "accuracy": 0.734,
       "macro_f1": 0.730,
-      "val_loss": 0.660,
+      "eval_loss": 0.660,
       "tweets_per_sec": 930,
       "epochs": 6
     },
     "ANTiVax": {
       "accuracy": 0.978,
       "macro_f1": 0.975,
-      "val_loss": 0.117,
+      "eval_loss": 0.117,
       "tweets_per_sec": 775,
       "epochs": 4
     },
     "MiDe22": {
       "accuracy": 0.781,
       "macro_f1": 0.736,
-      "val_loss": 0.756,
+      "eval_loss": 0.756,
       "tweets_per_sec": 477,
       "epochs": 4
     }
@@ -75,21 +75,21 @@
     "RDA-2017": {
       "accuracy": 0.811,
       "macro_f1": 0.801,
-      "val_loss": 0.582,
+      "eval_loss": 0.582,
       "tweets_per_sec": 1202,
       "epochs": 4
     },
     "ANTiVax": {
       "accuracy": 0.975,
       "macro_f1": 0.972,
-      "val_loss": 0.128,
+      "eval_loss": 0.128,
       "tweets_per_sec": 1086,
       "epochs": 4
     },
     "MiDe22": {
       "accuracy": 0.798,
       "macro_f1": 0.754,
-      "val_loss": 0.635,
+      "eval_loss": 0.635,
       "tweets_per_sec": 1057,
       "epochs": 4
     }
@@ -99,21 +99,21 @@
     "RDA-2017": {
       "accuracy": 0.814,
       "macro_f1": 0.804,
-      "val_loss": 0.680,
+      "eval_loss": 0.680,
       "tweets_per_sec": 872,
       "epochs": 4
     },
     "ANTiVax": {
       "accuracy": 0.977,
       "macro_f1": 0.974,
-      "val_loss": 0.140,
+      "eval_loss": 0.140,
       "tweets_per_sec": 952,
       "epochs": 4
     },
     "MiDe22": {
       "accuracy": 0.777,
       "macro_f1": 0.739,
-      "val_loss": 0.684,
+      "eval_loss": 0.684,
       "tweets_per_sec": 799,
       "epochs": 4
     }

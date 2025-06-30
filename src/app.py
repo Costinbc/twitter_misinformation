@@ -85,12 +85,12 @@ with st.sidebar:
     else:
         accs = [d["accuracy"] for d in model_metrics.values()]
         f1s = [d["macro_f1"] for d in model_metrics.values()]
-        vls = [d["val_loss"] for d in model_metrics.values()]
+        evls = [d["eval_loss"] for d in model_metrics.values()]
 
         st.markdown("### Metrics")
         st.metric("Accuracy", f"{sum(accs) / len(accs):.3f}")
         st.metric("Macro-F1", f"{sum(f1s) / len(f1s):.3f}")
-        st.metric("Val loss", f"{sum(vls) / len(vls):.3f}")
+        st.metric("Eval loss", f"{sum(evls) / len(evls):.3f}")
 
         bar_df = pd.DataFrame({
             "Dataset": list(model_metrics.keys()),
