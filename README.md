@@ -1,5 +1,14 @@
 # Mitigation and Detection of Misinformation on X (formerly known as Twitter)
+End-to-end pipeline for spotting misinformation in tweets:
 
+- loading and cleaning data from three public rumor datasets (Twitter15 + Twitter16, ANTiVax, MiDe22);
+
+- fine-tuning scripts for five Transformer models (BERTweet, TwHIN-BERT, RoBERTa-irony, XLNet, ELECTRA);
+
+- evaluation suite (accuracy, macro-F1, evaluation loss, throughput) + confusion-matrix plots;
+
+- Streamlit demo that gets a tweet URL input and classifies it.
+  
 # Datasets
 ### Rumor-Detection-Acl 2017
 A merged dataset from Twitter15 and Twitter16.
